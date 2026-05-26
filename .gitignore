@@ -1,0 +1,13 @@
+node_modules
+.pnpm-store
+.turbo
+coverage
+.DS_Store
+.env
+.env.*
+/dist
+/build
+.expo
+expo-env.d.ts
+packages/api-client/src/generated
+services/backend/openapi.json

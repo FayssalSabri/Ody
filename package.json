@@ -1,0 +1,29 @@
+{
+  "name": "odyssey",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:dashboard": "pnpm --filter @odyssey/dashboard dev",
+    "dev:backend": "pnpm --filter @odyssey/backend dev",
+    "dev:backend:worker": "pnpm --filter @odyssey/backend dev:worker",
+    "gen:contract": "pnpm --filter @odyssey/backend gen:contract",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "seed": "pnpm --filter @odyssey/backend seed",
+    "postinstall": "pnpm --filter @odyssey/dashboard exec node ./scripts/link-deps.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@types/node": "^20.14.12",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.12.0",
+    "orval": "^7.2.0",
+    "turbo": "^2.2.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.17.0"
+  }
+}
