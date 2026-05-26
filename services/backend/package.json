@@ -1,0 +1,36 @@
+{
+  "name": "@odyssey/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "dev:worker": "wrangler dev src/worker.ts",
+    "build": "tsc --noEmit",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "gen:contract": "tsx scripts/generate-openapi.ts && pnpm exec orval --input openapi.json --output ../../packages/api-client/src/generated/index.ts --client react-query --mode single --clean ../../packages/api-client/src/generated --prettier",
+    "seed": "tsx src/seed.ts"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.3.0",
+    "@hono/node-server": "^1.12.1",
+    "@hono/zod-openapi": "^0.9.10",
+    "@hono/zod-validator": "^0.4.1",
+    "@odyssey/shared": "workspace:*",
+    "@odyssey/types": "workspace:*",
+    "drizzle-orm": "^0.36.4",
+    "drizzle-zod": "^0.5.1",
+    "hono": "^4.6.13",
+    "postgres": "^3.4.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "tsx": "^4.19.1",
+    "wrangler": "^3.94.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.8"
+  }
+}
