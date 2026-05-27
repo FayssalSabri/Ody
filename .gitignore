@@ -11,3 +11,5 @@ coverage
 expo-env.d.ts
 packages/api-client/src/generated
 services/backend/openapi.json
+ai_prompt_guide_odyssey.md
+fullstack_developer_assignment_ody.md
