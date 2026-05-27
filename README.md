@@ -1,5 +1,23 @@
 # Odyssey
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Expo-000000?style=for-the-badge&logo=expo&logoColor=white" alt="Expo">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/React%20Native-0DB7ED?style=for-the-badge&logo=react&logoColor=white" alt="React Native">
+  <img src="https://img.shields.io/badge/Hono-111827?style=for-the-badge" alt="Hono">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Drizzle-2E8B57?style=for-the-badge" alt="Drizzle">
+  <img src="https://img.shields.io/badge/drizzle--zod-7A3E9A?style=for-the-badge" alt="drizzle-zod">
+  <img src="https://img.shields.io/badge/Zod-000000?style=for-the-badge" alt="Zod">
+  <img src="https://img.shields.io/badge/OpenAPI-F7B500?style=for-the-badge" alt="OpenAPI">
+  <img src="https://img.shields.io/badge/Orval-009688?style=for-the-badge" alt="Orval">
+  <img src="https://img.shields.io/badge/React%20Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="React Query">
+  <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm">
+  <img src="https://img.shields.io/badge/Turborepo-000000?style=for-the-badge" alt="Turborepo">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+</p>
+
 A polished restaurant operations dashboard built with the Odyssey fullstack stack.
 
 ---
