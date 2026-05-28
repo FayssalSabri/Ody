@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {
   useGetCategories,
@@ -25,19 +25,24 @@ import {
   StatusBanner,
   ToggleField
 } from '../components/ui-primitives'
+import { useMenuForm } from './hooks/use-menu-form'
 
 export default function MenuScreen() {
   const queryClient = useQueryClient()
   const menuQuery = useGetMenuItems()
   const categoriesQuery = useGetCategories()
 
-  const [itemModalOpen, setItemModalOpen] = useState(false)
-  const [categoryModalOpen, setCategoryModalOpen] = useState(false)
-  const [editingItemId, setEditingItemId] = useState<number | null>(null)
-  const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null)
-  const [feedback, setFeedback] = useState<{ tone: 'error' | 'success' | 'warning'; title: string; body?: string } | null>(null)
-  const [itemDraft, setItemDraft] = useState({ name: '', description: '', price: '', category: 'Mains', available: true })
-  const [categoryDraft, setCategoryDraft] = useState({ name: '', description: '', sortOrder: '1' })
+  const {
+    itemModalOpen, setItemModalOpen,
+    categoryModalOpen, setCategoryModalOpen,
+    editingItemId, editingCategoryId,
+    feedback, setFeedback,
+    itemDraft, setItemDraft,
+    categoryDraft, setCategoryDraft,
+    openNewItem, openEditItem,
+    openNewCategory, openEditCategory,
+    validateItemDraft, validateCategoryDraft
+  } = useMenuForm()
 
   const createItemMutation = usePostMenuItems({
     mutation: {
@@ -88,8 +93,8 @@ export default function MenuScreen() {
 
   const headerActions = (
     <>
-      <Button size="sm" variant="secondary" onPress={() => { setEditingCategoryId(null); setCategoryDraft({ name: '', description: '', sortOrder: String(categories.length + 1) }); setCategoryModalOpen(true) }}>New category</Button>
-      <Button size="sm" onPress={() => { setEditingItemId(null); setItemDraft({ name: '', description: '', price: '', category: categories[0]?.name ?? 'Mains', available: true }); setItemModalOpen(true) }} disabled={isBusy}>New item</Button>
+      <Button size="sm" variant="secondary" onPress={() => openNewCategory(categories.length + 1)}>New category</Button>
+      <Button size="sm" onPress={() => openNewItem(categories[0]?.name ?? 'Mains')} disabled={isBusy}>New item</Button>
     </>
   )
 
@@ -110,13 +115,7 @@ export default function MenuScreen() {
             <View key={cat.id} style={styles.catCell}>
               <Text style={styles.catName}>{cat.name}</Text>
               <Text style={styles.catCount}>{cat.itemCount} items</Text>
-              <ActionLink
-                onPress={() => {
-                  setEditingCategoryId(cat.id)
-                  setCategoryDraft({ name: cat.name, description: cat.description, sortOrder: String(cat.sortOrder) })
-                  setCategoryModalOpen(true)
-                }}
-              >
+              <ActionLink onPress={() => openEditCategory(cat)}>
                 Edit
               </ActionLink>
             </View>
@@ -167,13 +166,7 @@ export default function MenuScreen() {
                   <ActionLink onPress={() => updateItemMutation.mutate({ id: row.id, data: { available: !row.available } })}>
                     {row.available ? 'Disable' : 'Enable'}
                   </ActionLink>
-                  <ActionLink
-                    onPress={() => {
-                      setEditingItemId(row.id)
-                      setItemDraft({ name: row.name, description: row.description ?? '', price: String(row.price), category: row.category, available: row.available })
-                      setItemModalOpen(true)
-                    }}
-                  >
+                  <ActionLink onPress={() => openEditItem(row)}>
                     Edit
                   </ActionLink>
                 </CellActions>
@@ -193,10 +186,13 @@ export default function MenuScreen() {
         <ToggleField label="Available" value={itemDraft.available} onValueChange={(v) => setItemDraft((d) => ({ ...d, available: v }))} />
         <View style={styles.modalBtns}>
           <Button size="sm" onPress={() => {
-            const price = Number(itemDraft.price)
-            if (!itemDraft.name.trim() || !Number.isFinite(price) || price <= 0) { setFeedback({ tone: 'warning', title: 'Fill name and price' }); return }
-            const payload = { name: itemDraft.name.trim(), description: itemDraft.description.trim(), price, available: itemDraft.available, category: itemDraft.category }
-            editingItemId ? updateItemMutation.mutate({ id: editingItemId, data: payload }) : createItemMutation.mutate({ data: payload })
+            const payload = validateItemDraft()
+            if (!payload) return
+            if (editingItemId) {
+              updateItemMutation.mutate({ id: editingItemId, data: payload })
+            } else {
+              createItemMutation.mutate({ data: payload })
+            }
           }} disabled={isBusy}>Save</Button>
           <Button size="sm" variant="secondary" onPress={() => setItemModalOpen(false)}>Cancel</Button>
         </View>
@@ -208,10 +204,13 @@ export default function MenuScreen() {
         <InputField label="Sort" value={categoryDraft.sortOrder} onChangeText={(v) => setCategoryDraft((d) => ({ ...d, sortOrder: v }))} keyboardType="number-pad" />
         <View style={styles.modalBtns}>
           <Button size="sm" onPress={() => {
-            const sortOrder = Number(categoryDraft.sortOrder)
-            if (!categoryDraft.name.trim()) return
-            const payload = { name: categoryDraft.name.trim(), description: categoryDraft.description.trim(), sortOrder }
-            editingCategoryId ? updateCategoryMutation.mutate({ id: editingCategoryId, data: payload }) : createCategoryMutation.mutate({ data: payload })
+            const payload = validateCategoryDraft()
+            if (!payload) return
+            if (editingCategoryId) {
+              updateCategoryMutation.mutate({ id: editingCategoryId, data: payload })
+            } else {
+              createCategoryMutation.mutate({ data: payload })
+            }
           }} disabled={isBusy}>Save</Button>
           <Button size="sm" variant="secondary" onPress={() => setCategoryModalOpen(false)}>Cancel</Button>
         </View>

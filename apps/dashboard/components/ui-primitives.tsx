@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   Switch,
@@ -133,8 +134,8 @@ export function Button({
           variant === 'primary'
             ? styles.buttonTextPrimary
             : variant === 'ghost'
-            ? styles.buttonTextGhost
-            : styles.buttonTextSecondary
+              ? styles.buttonTextGhost
+              : styles.buttonTextSecondary
         ]}
       >
         {children}
@@ -166,7 +167,7 @@ export function StatusBanner({
   const resolved = feedbackStyles[tone]
 
   return (
-    <View style={[styles.banner, { backgroundColor: resolved.backgroundColor, borderColor: resolved.borderColor }]}> 
+    <View style={[styles.banner, { backgroundColor: resolved.backgroundColor, borderColor: resolved.borderColor }]}>
       <Text style={[styles.bannerTitle, { color: resolved.color }]}>{title}</Text>
       {body ? <Text style={[styles.bannerBody, { color: resolved.color }]}>{body}</Text> : null}
     </View>
@@ -419,34 +420,34 @@ export function DataTable<T extends { id: number | string }>({
         const isSelected = selectedRowId !== undefined && selectedRowId !== null && row.id === selectedRowId
 
         return (
-        <Pressable
-          key={row.id}
-          onPress={onRowPress ? () => onRowPress(row) : undefined}
-          style={(state) => {
-            const { pressed, hovered, focused } = getPressableInteraction(state)
+          <Pressable
+            key={row.id}
+            onPress={onRowPress ? () => onRowPress(row) : undefined}
+            style={(state) => {
+              const { pressed, hovered, focused } = getPressableInteraction(state)
 
-            return [
-              styles.tableRow,
-              isSelected && styles.tableRowSelected,
-              hovered && !isSelected && styles.tableRowHovered,
-              focused && styles.tableRowFocused,
-              pressed && styles.tableRowPressed
-            ]
-          }}
-        >
-          {columns.map((column) => (
-            <View
-              key={column.key}
-              style={[
-                styles.tableCell,
-                tableColumnStyle(column),
-                column.align === 'right' && styles.tableCellRight
-              ]}
-            >
-              {column.render(row)}
-            </View>
-          ))}
-        </Pressable>
+              return [
+                styles.tableRow,
+                isSelected && styles.tableRowSelected,
+                hovered && !isSelected && styles.tableRowHovered,
+                focused && styles.tableRowFocused,
+                pressed && styles.tableRowPressed
+              ]
+            }}
+          >
+            {columns.map((column) => (
+              <View
+                key={column.key}
+                style={[
+                  styles.tableCell,
+                  tableColumnStyle(column),
+                  column.align === 'right' && styles.tableCellRight
+                ]}
+              >
+                {column.render(row)}
+              </View>
+            ))}
+          </Pressable>
         )
       })}
     </View>
@@ -481,12 +482,15 @@ export function ModalSheet({
   )
 }
 
+const webTransition = Platform.OS === 'web' ? { transition: 'all 0.2s ease-in-out' } : {}
+
 const styles = StyleSheet.create({
   button: {
     borderRadius: tokens.radius.md,
     borderWidth: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    ...webTransition
   },
   buttonSm: {
     paddingVertical: 8,
@@ -541,7 +545,8 @@ const styles = StyleSheet.create({
     lineHeight: 24
   },
   buttonDisabled: {
-    opacity: 0.5
+    opacity: 0.5,
+    ...(Platform.OS === 'web' ? { cursor: 'not-allowed' as any } : {})
   },
   buttonPrimaryHovered: {
     backgroundColor: tokens.colors.brand[700],
@@ -676,7 +681,8 @@ const styles = StyleSheet.create({
     borderRadius: tokens.radius.lg,
     padding: tokens.spacing[4],
     borderWidth: 1,
-    borderColor: tokens.border.subtle
+    borderColor: tokens.border.subtle,
+    ...(Platform.OS === 'web' ? { boxShadow: tokens.shadow.sm } : {})
   },
   sectionTitle: {
     fontSize: tokens.typography.sizes.lg,
@@ -702,11 +708,12 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     shadowColor: '#0f172a',
-    shadowOpacity: 0.12,
-    shadowRadius: 36,
-    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: 0.15,
+    shadowRadius: 40,
+    shadowOffset: { width: 0, height: 20 },
     elevation: tokens.elevation[4],
-    overflow: 'hidden'
+    overflow: 'hidden',
+    ...(Platform.OS === 'web' ? { boxShadow: tokens.shadow.modal } : {})
   },
   modalHeader: {
     flexDirection: 'row',
@@ -744,7 +751,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: tokens.radius.lg,
     borderWidth: 1,
-    borderColor: tokens.colors.neutral[200]
+    borderColor: tokens.colors.neutral[200],
+    ...(Platform.OS === 'web' ? { boxShadow: tokens.shadow.card } : {})
   },
   tableHeader: {
     flexDirection: 'row',

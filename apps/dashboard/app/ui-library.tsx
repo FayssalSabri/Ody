@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { tokens } from '@odyssey/shared'
 import { AppShell } from '../components/app-shell'
 import { MetricCard, MetricGrid, Panel } from '../components/dashboard-layout'
-import { ActionLink, CellActions, CellAmount, CellEnd, CellMeta, CellPrimary, CellStack } from '../components/typography'
+import { ActionLink, CellActions, CellAmount, CellEnd, CellStack } from '../components/typography'
 import {
   Badge,
   Button,

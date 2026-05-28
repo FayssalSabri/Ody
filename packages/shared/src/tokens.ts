@@ -14,14 +14,14 @@ export const tokens = {
       900: '#4c1d95'
     },
     sidebar: {
-      bg: '#0b1225',
-      border: '#14203b',
+      bg: '#050b14', // Deeper, more premium dark
+      border: '#101a2e',
       text: '#94a3b8',
-      textActive: '#eff6ff',
-      hover: '#111d37',
-      active: '#111b34',
+      textActive: '#ffffff',
+      hover: '#0e172a',
+      active: '#16233d',
       accent: '#8b5cf6',
-      card: '#111a32'
+      card: '#0a1120'
     },
     canvas: '#f8fafc',
     surface: '#ffffff',
@@ -39,32 +39,40 @@ export const tokens = {
       900: '#0f172a'
     },
     semantic: {
-      success: { bg: '#ecfdf5', text: '#0f766e', border: '#a7f3d0' },
-      warning: { bg: '#fef3c7', text: '#b45309', border: '#fde68a' },
-      error: { bg: '#fee2e2', text: '#b91c1c', border: '#fecaca' },
-      info: { bg: '#eef2ff', text: '#4338ca', border: '#c7d2fe' }
+      success: { bg: '#f0fdf4', text: '#166534', border: '#bbf7d0' },
+      warning: { bg: '#fffbeb', text: '#b45309', border: '#fde68a' },
+      error: { bg: '#fef2f2', text: '#b91c1c', border: '#fecaca' },
+      info: { bg: '#eff6ff', text: '#1d4ed8', border: '#bfdbfe' }
     }
   },
-  spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48],
+  spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64],
   radius: { none: 0, sm: 6, md: 10, lg: 14, xl: 18, pill: 999 },
-  border: { subtle: '#e4e4e7', strong: '#d4d4d8', focus: '#704fe8' },
+  border: { subtle: '#e2e8f0', strong: '#cbd5e1', focus: '#8b5cf6' },
   elevation: { 0: 0, 1: 1, 2: 2, 3: 4, 4: 8 },
   layout: {
-    sidebarWidth: 240,
-    contentPadding: 24,
-    gridGap: 18
+    sidebarWidth: 260,
+    contentPadding: 32,
+    gridGap: 24
   },
   shadow: {
-    card: '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
-    modal: '0 20px 50px rgba(0,0,0,0.15)'
+    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    card: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+    md: '0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08)',
+    modal: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+    focus: '0 0 0 3px rgba(139, 92, 246, 0.3)'
   },
   typography: {
     families: {
-      sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      mono: 'ui-monospace, SFMono-Regular, Menlo, monospace'
+      sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
     },
-    sizes: { xs: 11, sm: 13, md: 15, lg: 17, xl: 20, '2xl': 24, '3xl': 28 },
+    sizes: { xs: 12, sm: 14, md: 16, lg: 18, xl: 20, '2xl': 24, '3xl': 30 },
     weights: { regular: '400' as const, medium: '500' as const, semibold: '600' as const, bold: '700' as const }
+  },
+  animation: {
+    fast: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    normal: '250ms cubic-bezier(0.4, 0, 0.2, 1)',
+    slow: '350ms cubic-bezier(0.4, 0, 0.2, 1)'
   }
 } as const
 

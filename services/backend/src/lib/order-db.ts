@@ -14,7 +14,7 @@ import {
 import { db } from './drizzle.js'
 import { menuCategories, menuItems } from '../db/schema.js'
 import { asc, count, eq } from 'drizzle-orm'
-import { SETTING_KEYS, type SettingKey } from '@odyssey/types'
+import { type SettingKey } from '@odyssey/types'
 
 const fallbackStore = createOrderStore()
 

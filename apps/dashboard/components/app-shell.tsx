@@ -4,6 +4,8 @@ import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import { tokens } from '@odyssey/shared'
 import { getPressableInteraction } from '../lib/pressable-state'
 
+import odyLogo from '../assets/Ody.png'
+
 const NAV: Array<{
   section: string
   items: Array<{ href: '/' | '/orders' | '/menu' | '/crm' | '/settings' | '/ui-library'; label: string }>
@@ -45,7 +47,7 @@ export function AppShell({
     <View style={styles.root}>
       <View style={styles.sidebar}>
         <View style={styles.brandBlock}>
-          <Image source={require('../assets/Ody.png')} style={styles.logoImage} resizeMode="contain" />
+          <Image source={odyLogo} style={styles.logoImage} resizeMode="contain" />
           <View style={styles.brandCopy}>
             <Text style={styles.venue}>Ody</Text>
             <Text style={styles.role}>Restaurant experience</Text>

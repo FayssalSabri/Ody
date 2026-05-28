@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { type GetOrdersParams, type Order, useGetCustomers, useGetMenuItems, useGetOrders } from '@odyssey/api-client'
+import { type GetOrdersParams, useGetCustomers, useGetMenuItems, useGetOrders } from '@odyssey/api-client'
 import { tokens } from '@odyssey/shared'
 import { AppShell } from '../components/app-shell'
 import { PageTabs } from '../components/page-tabs'
@@ -19,6 +19,7 @@ import {
 } from '../components/ui-primitives'
 import { formatActionLabel, formatCurrency, getAllowedActions, getStatusTone, type OrderAction } from './lib/dashboard-helpers'
 import { useOrderActions } from './hooks/use-order-actions'
+import { useCreateOrderFlow } from './hooks/use-create-order-flow'
 
 type OrdersTab = 'queue' | 'all'
 
@@ -39,8 +40,6 @@ export default function OrdersScreen() {
   const [search, setSearch] = useState('')
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
-  const [feedback, setFeedback] = useState<{ tone: 'success' | 'error' | 'warning'; title: string; body?: string } | null>(null)
-  const [draft, setDraft] = useState({ customerId: '', items: [{ menuItemId: '', quantity: '1' }] })
 
   const ordersQuery = useGetOrders(filters)
   const customersQuery = useGetCustomers()
@@ -55,38 +54,18 @@ export default function OrdersScreen() {
   const customers = customersQuery.data?.data ?? []
   const menuItems = menuQuery.data?.data ?? []
 
-  const orderTotal = useMemo(() => {
-    return draft.items.reduce((sum, item) => {
-      const menu = menuItems.find((m) => String(m.id) === item.menuItemId)
-      const quantity = Number(item.quantity)
-      if (!menu || !Number.isFinite(quantity) || quantity <= 0) {
-        return sum
-      }
-      return sum + menu.price * quantity
-    }, 0)
-  }, [draft.items, menuItems])
+  const { draft, setDraft, feedback, setFeedback, orderTotal, validateDraft, resetDraft } = useCreateOrderFlow(menuItems)
 
   const handleCreateOrder = () => {
-    if (!draft.customerId) {
-      setFeedback({ tone: 'warning', title: 'Choose a customer', body: 'Select a customer before creating the order.' })
-      return
-    }
-
-    const items = draft.items
-      .map((item) => ({ menuItemId: Number(item.menuItemId), quantity: Number(item.quantity) }))
-      .filter((item) => item.menuItemId && Number.isFinite(item.quantity) && item.quantity > 0)
-
-    if (!items.length) {
-      setFeedback({ tone: 'warning', title: 'Add at least one item', body: 'Select an item and enter a valid quantity.' })
-      return
-    }
+    const payload = validateDraft()
+    if (!payload) return
 
     createMutation.mutate(
-      { data: { customerId: Number(draft.customerId), items } },
+      { data: payload },
       {
         onSuccess: () => {
           setCreateOpen(false)
-          setDraft({ customerId: '', items: [{ menuItemId: '', quantity: '1' }] })
+          resetDraft()
         }
       }
     )
@@ -136,7 +115,15 @@ export default function OrdersScreen() {
           label="Status"
           value={filters.status ?? ''}
           options={statusOptions}
-          onSelect={(v) => setFilters((f) => { const n = { ...f }; v ? (n.status = v as GetOrdersParams['status']) : delete n.status; return n })}
+          onSelect={(v) => setFilters((f) => {
+            const n = { ...f }
+            if (v) {
+              n.status = v as GetOrdersParams['status']
+            } else {
+              delete n.status
+            }
+            return n
+          })}
         />
         <View style={styles.filterBtns}>
           <Button size="sm" onPress={() => setFilters({ ...(search.trim() ? { search: search.trim() } : {}), ...(filters.status ? { status: filters.status } : {}) })}>Apply</Button>

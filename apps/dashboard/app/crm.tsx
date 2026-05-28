@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { useGetCustomers, useGetCustomersIdOrders } from '@odyssey/api-client'
 import { tokens } from '@odyssey/shared'
 import { AppShell } from '../components/app-shell'
@@ -15,7 +15,8 @@ export default function CRMPage() {
   const selected = useMemo(() => customers.find((c) => c.id === selectedId) ?? null, [customers, selectedId])
   const ordersQuery = useGetCustomersIdOrders(selected?.id ?? 0, {
     query: {
-      enabled: selected?.id != null
+      enabled: selected?.id != null,
+      queryKey: ['/customers', selected?.id, 'orders']
     }
   })
   const orders = ordersQuery.data?.data ?? []
@@ -120,22 +121,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: tokens.colors.neutral[50],
     borderRadius: tokens.radius.md,
-    padding: 14,
+    padding: 16,
     borderWidth: 1,
     borderColor: tokens.border.subtle,
-    alignItems: 'flex-end'
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...(Platform.OS === 'web' ? { boxShadow: tokens.shadow.sm } : {})
   },
   statN: {
-    fontSize: tokens.typography.sizes.md,
+    fontSize: tokens.typography.sizes['2xl'],
     fontWeight: tokens.typography.weights.bold,
-    color: tokens.colors.neutral[900],
+    color: tokens.colors.brand[600],
     fontVariant: ['tabular-nums']
   },
   statL: {
-    fontSize: tokens.typography.sizes.xs,
+    fontSize: tokens.typography.sizes.sm,
     color: tokens.colors.neutral[500],
-    marginTop: 2,
+    marginTop: 4,
     textTransform: 'uppercase',
-    letterSpacing: 0.4
+    letterSpacing: 0.5,
+    fontWeight: tokens.typography.weights.medium
   }
 })
